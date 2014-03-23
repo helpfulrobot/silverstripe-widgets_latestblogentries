@@ -8,15 +8,9 @@
 class LatestBlogEntries extends Widget {
 
 	static $db = array(
-		'NumberOfItems' => 'Int'
+		'NumberOfItems' => 'Int',
+		'OnlyFromThisPage' => 'Boolean'
 	);
-	static $has_one = array();
-
-	static $has_many = array();
-
-	static $many_many = array();
-
-	static $belongs_many_many = array();
 
 	static $defaults = array(
 		'NumberOfItems' => 7
@@ -30,14 +24,24 @@ class LatestBlogEntries extends Widget {
 
 	function getCMSFields() {
 		return new FieldSet(
-			new NumericField("NumberOfItems","Number Of Items Shown")
+			new NumericField("NumberOfItems","Number Of Items Shown"),
+			new CheckboxField("OnlyFromThisPage","Only from This Page")
 		);
 	}
 
 	function Links() {
-		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
 		Requirements::themedCSS("widgets_latestblogentries");
-		return DataObject::get("BlogEntry", null, "{$bt}Created{$bt} DESC", null, $this->NumberOfItems);
+		if($this->OnlyFromThisPage) {
+			$controller = Controller::curr();
+			if($controller) {
+				if($data = $controller->data()) {
+					return $data->Entries($this->NumberOfItems);
+				}
+			}
+		}
+		else {
+			return DataObject::get("BlogEntry", null, "\"Created\" DESC", null, $this->NumberOfItems);
+		}
 	}
 
 }
