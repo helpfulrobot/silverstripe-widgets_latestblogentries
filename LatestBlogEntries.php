@@ -9,6 +9,7 @@ class LatestBlogEntries extends Widget {
 
 	static $db = array(
 		'NumberOfItems' => 'Int',
+		'Header' => 'Varchar(30)',
 		'OnlyFromThisPage' => 'Boolean'
 	);
 
@@ -42,7 +43,10 @@ class LatestBlogEntries extends Widget {
 	}
 
 	function Title(){
-		if($this->OnlyFromThisPage && $data = $this->getData()) {
+		if($this->Header) {
+			return $this->Header;
+		}
+		elseif($this->OnlyFromThisPage && $data = $this->getData()) {
 			return $data->Title." News";
 		}
 		else {
