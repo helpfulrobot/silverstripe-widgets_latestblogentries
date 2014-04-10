@@ -29,18 +29,33 @@ class LatestBlogEntries extends Widget {
 		);
 	}
 
+	private $data = null;
+
 	function Links() {
 		Requirements::themedCSS("widgets_latestblogentries");
-		if($this->OnlyFromThisPage) {
-			$controller = Controller::curr();
-			if($controller) {
-				if($data = $controller->data()) {
-					return $data->Entries($this->NumberOfItems);
-				}
-			}
+		if($this->OnlyFromThisPage && $data = $this->getData()) {
+			return $data->Entries($this->NumberOfItems);
 		}
 		else {
 			return DataObject::get("BlogEntry", null, "\"Created\" DESC", null, $this->NumberOfItems);
+		}
+	}
+
+	function Title(){
+		if($this->OnlyFromThisPage && $data = $this->getData()) {
+			return $data->Title." News";
+		}
+		else {
+			return parent::Title();
+		}
+	}
+
+	protected function getData(){
+		$controller = Controller::curr();
+		if($controller) {
+			if($data = $controller->data()) {
+				return $data;
+			}
 		}
 	}
 
