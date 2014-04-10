@@ -25,6 +25,7 @@ class LatestBlogEntries extends Widget {
 
 	function getCMSFields() {
 		return new FieldSet(
+			new TextField("Header","Header"),
 			new NumericField("NumberOfItems","Number Of Items Shown"),
 			new CheckboxField("OnlyFromThisPage","Only from This Page")
 		);
