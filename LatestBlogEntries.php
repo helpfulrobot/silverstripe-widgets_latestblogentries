@@ -9,7 +9,7 @@ class LatestBlogEntries extends Widget {
 
 	static $db = array(
 		'NumberOfItems' => 'Int',
-		'Header' => 'Varchar(30)',
+		'Header' => 'Varchar(100)',
 		'OnlyFromThisPage' => 'Boolean'
 	);
 
